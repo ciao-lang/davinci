@@ -20,6 +20,7 @@
 :- use_module(library(read), [read/1]).
 :- use_module(library(graphs/ugraphs), [vertices_edges_to_ugraph/3]).
 :- use_module(library(write), [write/2, writeq/1]).
+:- use_module(library(errhandle), [error_protect/2]).
 :- use_module(library(process)).
 
 :- doc(title,"Interface to uDraw(Graph) (daVinci)").
@@ -78,27 +79,13 @@ quit(quit).
 davinci :-
 	\+ davinci(_,_,_),
 	command(Command, Args),
-	catch(process_call(path(Command), Args,
-	                   [stdin(stream(In)), stdout(stream(Out)),
-			    background(P)]),
-	      error(Error,Where),
-	      handle_error(Error,Where)),
+	error_protect(process_call(path(Command), Args,
+	                 [stdin(stream(In)), stdout(stream(Out)),
+			  background(P)]), fail),
 	ready(Ok),
 	prompt_for(Out,X),
 	X=Ok,
 	asserta_fact(davinci(P,In,Out)).
-
-handle_error(Error, Where) :-
-        current_output(S),
-        set_output(user_error),
-        display('{ERROR: '),
-        display(Where),
-        display(' - '),
-        display(Error),
-        display('}'),
-        nl,
-        set_output(S),
-        fail.
 
 % -------------------------------------------------------------------------
 :- doc(topd/0,
