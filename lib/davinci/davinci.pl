@@ -135,7 +135,7 @@ davinci_quit :-
  Two terms are interpreted in a special way: @tt{string/1} and 
      @tt{text/1}:
  @tt{string(Term)} is given to daVinci as @tt{""Term""};
- @tt{text(List)} is given as @tt{""Term1\nTerm2\n...Term\n""}
+ @tt{text(List)} is given as @tt{""Term1\\\\nTerm2\\\\n...Term\\\\n""}
      for each @tt{Term} in @tt{List}.
  If your term has functors @tt{string/1} and @tt{text/1} that you don't 
      want to be interpreted this way, use it twice, i.e.,
